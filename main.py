@@ -12,8 +12,12 @@ class GamerBot:
     def main_cycle(self):
         while True:
             try:
-
-                new_acc = self.shelf_class.get_new_acc()
+                while True:
+                    new_acc = self.shelf_class.get_new_acc()
+                    if new_acc == False:
+                        time.sleep(5)
+                        continue
+                    break
                 acc_name = new_acc[0]
                 token = new_acc[1]
                 difficulty = new_acc[2]
