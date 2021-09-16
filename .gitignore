@@ -1,7 +1,7 @@
 *.txt
 __pycache__
 .idea
-accounts_time.*
-accounts_gold.*
+*.dat
+*.dir
 APPS/
-normal_accounts_time.*
+*.bak
