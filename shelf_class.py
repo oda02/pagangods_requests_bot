@@ -94,6 +94,8 @@ class shelf_class():
             if flag:
                 self.accounts_time['normal_accs'].appendleft([account, 0])
         self.tokens_get_first_time()
+        # self.get_all_accs_with_new_cards()
+        # input()
         thrd = Thread(target=self.check_gold)
         thrd.start()
         print(self.normal_accs)
@@ -142,7 +144,7 @@ class shelf_class():
             acc_time = time.time() + 3600+5
         if account in self.normal_accs:
             if flag:
-                self.normal_accs_minute += 5
+                self.normal_accs_minute += 1
             self.accounts_time['normal_accs'].append([account, acc_time])
         else:
             if flag:
@@ -214,3 +216,31 @@ class shelf_class():
             except Exception as e:
                 print(e)
                 pass
+
+    def get_all_accs_with_new_cards(self):
+
+
+
+        for acc in self.all_accs:
+            if self.tokens[acc]['expires_time'] < time.time():
+                token = self.get_token(acc)
+            else:
+                token = self.tokens[acc]['access_token']
+            response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
+                                     headers={'Authorization': 'Bearer ' + token})
+            data = response.json()['data']
+            for x in data:
+                if x['lockReason'] == None and x['attributes']['multiplier'] == 1:
+                    print(acc)
+
+        for acc in self.normal_accs:
+            if self.tokens[acc]['expires_time'] < time.time():
+                token = self.get_token(acc)
+            else:
+                token = self.tokens[acc]['access_token']
+            response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
+                                     headers={'Authorization': 'Bearer ' + token})
+            data = response.json()['data']
+            for x in data:
+                if x['lockReason'] == None and x['attributes']['multiplier'] == 1:
+                    print(acc)

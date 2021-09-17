@@ -68,6 +68,7 @@ class GamerBot:
                 print(r.json()['data']['reward']['userSums'])
             if r.json()['data']['reward']['assets']:
                 write_msg(acc)
+                self.add_acc_to_file(acc)
         return False
     def get_teamsId(self, token):
         r = requests.post('https://app.pagangods.io/api/v1/teams/list',
@@ -85,6 +86,18 @@ class GamerBot:
             return r.json()['error']
         except:
             return False
+
+    def add_acc_to_file(self, acc_p):
+        accs = []
+
+        with open('./cards_accs.txt', 'r') as fa:
+            for line in fa:
+                if line:
+                    line = line.split()
+                    accs.append(line)
+        if acc_p not in accs:
+            with open('./cards_accs.txt', 'a') as f:
+                f.writelines(acc_p+'\n')
 
 
 
