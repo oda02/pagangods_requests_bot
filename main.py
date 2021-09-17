@@ -1,10 +1,9 @@
-
+from test import write_msg
 import time
 
 import requests
 
 from shelf_class import shelf_class
-
 
 
 
@@ -38,7 +37,7 @@ class GamerBot:
                         continue
                     else:
                         expeditionId = expeditionId['expeditionId']
-                    self.complete_expedition(token, expeditionId)
+                    self.complete_expedition(token, expeditionId, acc_name)
                 teamId = self.get_teamsId(token)
                 if self.start_expedition(token, teamId, difficulty) == None:
                     print('success')
@@ -60,13 +59,15 @@ class GamerBot:
         if r.json()['data']:
             return r.json()['data'][0]
         return False
-    def complete_expedition(self, token, expeditionId):
+    def complete_expedition(self, token, expeditionId, acc):
         r = requests.post('https://app.pagangods.io/api/v1/expeditions/complete_expedition',
                           headers={'Authorization': 'Bearer ' + token},
                           json={"expeditionId": expeditionId})
         if r.json()['data']:
             if r.json()['data']['isSuccessful']:
-                print(r.json()['data']['reward'])
+                print(r.json()['data']['reward']['userSums'])
+            if r.json()['data']['reward']['assets']:
+                write_msg(acc)
         return False
     def get_teamsId(self, token):
         r = requests.post('https://app.pagangods.io/api/v1/teams/list',
