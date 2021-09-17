@@ -7,7 +7,7 @@ def get_token_pair(username, password):
     client_id = r'pagangods-mobile'
     redirect_uri = r'pagangods://oauthredirect/signin-oidc'
     response = requests.post('https://my.inanomo.com/api/v1/authentication', json={"username": username, "password": password, "returnUrl":"/connect/authorize/callback?client_id=pagangods-mobile&redirect_uri=pagangods%3A%2F%2Foauthredirect%2Fsignin-oidc&response_type=code&scope=pagan-gods%20offline_access&code_challenge=fzAAX9yn-51tePGkburt6Yi_ia92mZ81jndwP56sBHw&code_challenge_method=S256&response_method=query"})
-    # print(response.text)
+    print(response)
     s = response.headers['set-cookie']
     s1 = s[s.find('_s'):]
     s2 = s1[:s1.find(';')+1]
