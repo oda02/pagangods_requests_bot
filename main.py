@@ -1,13 +1,18 @@
+
 import time
 
 import requests
 
 from shelf_class import shelf_class
 
+
+
+
 class GamerBot:
     def __init__(self, shelf_class_p):
         self.shelf_class = shelf_class_p
         self.main_cycle()
+
 
     def main_cycle(self):
         while True:
@@ -15,12 +20,15 @@ class GamerBot:
                 while True:
                     new_acc = self.shelf_class.get_new_acc()
                     if new_acc == False:
-                        time.sleep(5)
+
+                        time.sleep(0.5)
                         continue
                     break
                 acc_name = new_acc[0]
                 token = new_acc[1]
                 difficulty = new_acc[2]
+
+
                 print(acc_name)
                 expeditionId = self.get_current_expeditionId(token)
                 if expeditionId:
@@ -39,7 +47,11 @@ class GamerBot:
                     print(token)
 
             except Exception as e:
-                self.shelf_class.add_acc_timer(acc_name, 0)
+                try:
+                    self.shelf_class.add_acc_timer(acc_name, 0)
+                except:
+                    print('err')
+                    pass
                 print(e)
                 pass
 
