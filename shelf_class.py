@@ -31,7 +31,7 @@ class shelf_class():
                     line = line.split()
                     self.all_accs.update({line[0]: line[1]})
 
-        self.accs_minute_limit = math.ceil(len(self.all_accs)/60)
+        self.accs_minute_limit = math.ceil(len(self.all_accs)/60 + 0.2)
         self.accs_minute = 0
         with open('./normal_accs.txt', 'r') as fa:
             for line in fa:
@@ -139,10 +139,10 @@ class shelf_class():
             acc_time = time_p
             flag = False
         else:
-            acc_time = time.time() + 3600
+            acc_time = time.time() + 3600+5
         if account in self.normal_accs:
             if flag:
-                self.normal_accs_minute += 1
+                self.normal_accs_minute += 5
             self.accounts_time['normal_accs'].append([account, acc_time])
         else:
             if flag:
