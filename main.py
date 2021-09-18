@@ -1,3 +1,5 @@
+import json
+
 from test import write_msg
 import time
 
@@ -67,8 +69,22 @@ class GamerBot:
             if r.json()['data']['isSuccessful']:
                 print(r.json()['data']['reward']['userSums'])
             if r.json()['data']['reward']['assets']:
-                write_msg(acc)
                 self.add_acc_to_file(acc)
+                try:
+                    card_id = r.json()['data']['reward']['assets'][0]
+                    response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
+                                             headers={'Authorization': 'Bearer ' + token})
+                    units = json.loads(response.text)['data']
+                    for x in units:
+                        if x['serverData']['id'] == card_id:
+                            print(x['attributes']['name'])
+                            write_msg(str(acc) + ' ' + str(x['attributes']['name']))
+                except:
+                    try:
+                        write_msg(str(acc) + ' error ' + str(r.json()['data']['reward']['assets']))
+                    except:
+                        write_msg(str(acc) + ' error3228 ')
+
         return False
     def get_teamsId(self, token):
         r = requests.post('https://app.pagangods.io/api/v1/teams/list',
