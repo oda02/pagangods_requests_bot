@@ -168,7 +168,7 @@ class shelf_class():
                 self.tokens.sync()
 
     def get_token(self, account):
-        if self.tokens[account]['expires_time'] < time.time() + 60:
+        if self.tokens[account]['expires_time'] + 60 < time.time():
             self.tokens[account] = refresh_token(self.tokens[account]['refresh_token'])
         else:
             token = self.tokens[account]['access_token']
