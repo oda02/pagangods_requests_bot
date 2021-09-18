@@ -1,3 +1,4 @@
+import shelve
 import time
 
 import requests
@@ -11,8 +12,10 @@ with open('./new_accs.txt', 'r') as fa:
             line = line.split()
             new_accs[line[0]] = line[1]
 
+tokens_p = shelve.open('tokens', writeback=True)
 for acc in new_accs:
     tokens = get_token_pair(acc, new_accs[acc])
+
     response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})
     units = json.loads(response.text)['data']
@@ -38,4 +41,4 @@ for acc in new_accs:
         print('Аккаунт ' + acc + ' успешно добавлен')
     else:
         print('Вышло недоразумение')
-    time.sleep(10)
+    time.sleep(5)
