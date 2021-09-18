@@ -5,7 +5,6 @@ from collections import deque
 from Authorization import *
 from threading import Thread
 from datetime import datetime
-
 def singleton(class_):
     instances = {}
     def getinstance(*args, **kwargs):
@@ -17,6 +16,7 @@ def singleton(class_):
 @singleton
 class shelf_class():
     def __init__(self):
+
         self.all_accs = {}
         self.normal_accs = {}
         self.all_accs_gold = shelve.open('accounts_gold', writeback=True)
@@ -93,6 +93,8 @@ class shelf_class():
                     flag = False
             if flag:
                 self.accounts_time['normal_accs'].appendleft([account, 0])
+        self.get_all_accs_with_new_cards()
+        input()
         self.tokens_get_first_time()
         # self.get_all_accs_with_new_cards()
         # input()
@@ -251,3 +253,5 @@ class shelf_class():
             for x in data:
                 if x['lockReason'] == None and x['attributes']['multiplier'] == 1:
                     print(acc)
+
+shelf_class()
