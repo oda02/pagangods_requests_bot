@@ -111,3 +111,5 @@ for account in accs:
 
     driver.close()
     driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
+
+driver.close()

@@ -96,8 +96,8 @@ class shelf_class():
         self.tokens_get_first_time()
         # self.get_all_accs_with_new_cards()
         # input()
-        thrd = Thread(target=self.check_gold)
-        thrd.start()
+        # thrd = Thread(target=self.check_gold)
+        # thrd.start()
         print(self.normal_accs)
         print(self.accounts_time['normal_accs'])
 
@@ -169,7 +169,15 @@ class shelf_class():
 
     def get_token(self, account):
         if self.tokens[account]['expires_time'] + 60 < time.time():
-            self.tokens[account] = refresh_token(self.tokens[account]['refresh_token'])
+            try:
+                self.tokens[account] = refresh_token(self.tokens[account]['refresh_token'])
+            except:
+                try:
+                    passw = self.all_accs[account]
+                except:
+                    passw = self.normal_accs[account]
+        #
+                self.tokens[account] = get_token_pair(account, passw)
         else:
             token = self.tokens[account]['access_token']
 
