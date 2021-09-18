@@ -32,7 +32,7 @@ def get_token_pair(username, password):
 
 
 def refresh_token(refresh_token):
-    print(refresh_token)
+    # print(refresh_token)
     CLIENT_ID = "pagangods-mobile"
     CLIENT_SECRET = "your-client-secret"
     REDIRECT_URI = "pagangods://oauthredirect/signin-oidc"
@@ -54,7 +54,7 @@ def refresh_token(refresh_token):
 
     r = requests.post(url, headers=headers, data=data)
     response = r.json()
-    print(r)
+    # print(r)
 
     kok = {
         "access_token": response.get('access_token'),
