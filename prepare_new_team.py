@@ -15,6 +15,7 @@ with open('./new_accs.txt', 'r') as fa:
 tokens_p = shelve.open('tokens', writeback=True)
 for acc in new_accs:
     tokens = get_token_pair(acc, new_accs[acc])
+    tokens_p[acc] = tokens
 
     response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})

@@ -168,14 +168,17 @@ class shelf_class():
                 self.tokens.sync()
 
     def get_token(self, account):
+        if self.tokens[account]['expires_time'] < time.time() + 60:
+            self.tokens[account] = refresh_token(self.tokens[account]['refresh_token'])
+        else:
+            token = self.tokens[account]['access_token']
 
-        # self.tokens[account] = refresh_token(self.tokens[account]['refresh_token'])
-        try:
-            passw = self.all_accs[account]
-        except:
-            passw = self.normal_accs[account]
-
-        self.tokens[account] = get_token_pair(account, passw)
+        # try:
+        #     passw = self.all_accs[account]
+        # except:
+        #     passw = self.normal_accs[account]
+        #
+        # self.tokens[account] = get_token_pair(account, passw)
         self.tokens.sync()
         return self.tokens[account]['access_token']
 
@@ -221,10 +224,7 @@ class shelf_class():
 
 
         for acc in self.all_accs:
-            if self.tokens[acc]['expires_time'] < time.time():
-                token = self.get_token(acc)
-            else:
-                token = self.tokens[acc]['access_token']
+            token = self.get_token(acc)
             response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
                                      headers={'Authorization': 'Bearer ' + token})
             data = response.json()['data']
