@@ -184,7 +184,6 @@ class shelf_class():
             GOLD = 0
             try:
                 for acc in self.normal_accs:
-                    print(GOLD)
                     if self.tokens[acc]['expires_time'] < time.time():
                         token = self.get_token(acc)
                     else:
