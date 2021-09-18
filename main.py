@@ -22,7 +22,7 @@ class GamerBot:
                     new_acc = self.shelf_class.get_new_acc()
                     if new_acc == False:
 
-                        time.sleep(0.5)
+                        time.sleep(1)
                         continue
                     break
                 acc_name = new_acc[0]
