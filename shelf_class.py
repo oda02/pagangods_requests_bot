@@ -93,8 +93,6 @@ class shelf_class():
                     flag = False
             if flag:
                 self.accounts_time['normal_accs'].appendleft([account, 0])
-        self.get_all_accs_with_new_cards()
-        input()
         self.tokens_get_first_time()
         # self.get_all_accs_with_new_cards()
         # input()
