@@ -101,7 +101,11 @@ for account in accs:
     time.sleep(1)
     driver.find_element_by_xpath('//button[text()="Перенести в WAX"]').click()
     time.sleep(1)
-
+    with open('./cards_accs.txt', 'r') as fe:
+        lines = fe.readlines()
+    # запишем файл построчно пропустив первую строку
+    with open('./cards_accs.txt', 'w') as fe:
+        fe.writelines(lines[1:])
 
 
 
