@@ -1,5 +1,5 @@
 import json
-
+import shelve
 from test import write_msg
 import time
 
@@ -8,12 +8,31 @@ import requests
 from shelf_class import shelf_class
 
 
+def updater(shelf_class_p, window_p):
+    while True:
+        try:
+            window_p['raids'].update(
+                str(shelf_class_p.stat['successful']) + '/' + str(shelf_class_p.stat['all']) + '    ' +
+                str(round(shelf_class_p.stat['successful'] / shelf_class_p.stat['all'] * 100, 2)) + "%")
+
+            window_p['cards'].update(
+                str(shelf_class_p.stat['cards']) + '/' + str(shelf_class_p.stat['successful']) + '    ' +
+                str(round(shelf_class_p.stat['cards'] / shelf_class_p.stat['successful'] * 100, 2)) + "%")
+
+            window_p['gold'].update(shelf_class_p.GOLD)
+            if shelf_class_p.refresh_button_on:
+                window['refresh_gold'].update(disabled=False)
+        except:
+            pass
+        time.sleep(0.2)
+
+
 
 class GamerBot:
-    def __init__(self, shelf_class_p):
+    def __init__(self, shelf_class_p, useless_shit):
         self.shelf_class = shelf_class_p
-        self.main_cycle()
 
+        self.main_cycle()
 
     def main_cycle(self):
         while True:
@@ -66,9 +85,12 @@ class GamerBot:
                           headers={'Authorization': 'Bearer ' + token},
                           json={"expeditionId": expeditionId})
         if r.json()['data']:
+            self.shelf_class.stat['all'] += 1
             if r.json()['data']['isSuccessful']:
+                self.shelf_class.stat['successful'] += 1
                 print(r.json()['data']['reward']['userSums'])
             if r.json()['data']['reward']['assets']:
+                self.shelf_class.stat['cards'] += 1
                 self.add_acc_to_file(acc)
                 try:
                     card_id = r.json()['data']['reward']['assets'][0]
@@ -84,7 +106,7 @@ class GamerBot:
                         write_msg(str(acc) + ' error ' + str(r.json()['data']['reward']['assets']))
                     except:
                         write_msg(str(acc) + ' error3228 ')
-
+        self.shelf_class.stat.sync()
         return False
     def get_teamsId(self, token):
         r = requests.post('https://app.pagangods.io/api/v1/teams/list',
@@ -117,6 +139,43 @@ class GamerBot:
 
 
 
-shelf_class_ob = shelf_class()
+import threading
+import PySimpleGUI as sg
 
-GamerBot(shelf_class_ob)
+
+
+shelf_class_ob = shelf_class()
+layout = []
+layout_line = [sg.Text("Your Gold:  "), sg.Text(size=(20,1), key='gold',visible=True), sg.Button('Refresh',key='refresh_gold', disabled=False)]
+layout.append(layout_line)
+
+layout_line = [sg.Text("                               STATS:           ")]
+layout.append(layout_line)
+layout_line = [sg.Text("Successful raids: "), sg.Text(size=(20,1), key='raids',visible=True)]
+layout.append(layout_line)
+
+layout_line = [sg.Text("Cards dropped:"), sg.Text(size=(20,1), key='cards',visible=True)]
+layout.append(layout_line)
+# Create the window
+window = sg.Window('Window Title', layout, finalize=True)
+threading.Thread(target=GamerBot, args=(shelf_class_ob, 1)).start()
+threading.Thread(target=updater,
+                         args=(shelf_class_ob, window)).start()
+while True:
+    event, values = window.read()
+    if event == sg.WINDOW_CLOSED:
+        break
+    print(event)
+    if event == 'refresh_gold':
+        window['refresh_gold'].update(disabled=True)
+        threading.Thread(target=shelf_class_ob.check_gold).start()
+
+
+
+
+
+# Finish up by removing from the screen
+window.close()
+
+
+

@@ -1,27 +1,42 @@
-import shelve
-import time
+import threading
+import decimal
+n = decimal.Decimal('768768768')
+print('{0:,}'.format(n).replace(',', ' '))
 
-import requests
-from Authorization import get_token_pair
-import json
 
-new_accs = {}
-with open('./new_accs.txt', 'r') as fa:
-    for line in fa:
-        if line:
-            line = line.split()
-            new_accs[line[0]] = line[1]
 
-tokens_p = shelve.open('tokens', writeback=True)
-for acc in new_accs:
-    tokens = get_token_pair(acc, new_accs[acc])
-    tokens_p[acc] = tokens
 
-    response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
-                             headers={'Authorization': 'Bearer ' + tokens['access_token']})
-    units = json.loads(response.text)['data']
-    for x in units:
-        if x['serverData']['id'] == '2581bf8d-b970-471a-a57e-cbeccd84dffa':
-            print(x['attributes']['name'])
-    print(units)
-    input()
+import PySimpleGUI as sg
+layout = []
+layout_line = [sg.Text("Your Gold:  "), sg.Text(size=(20,1), key='gold',visible=True), sg.Button('Refresh',key='refresh+gold', disabled=True)]
+layout.append(layout_line)
+
+layout_line = [sg.Text("                               STATS:           ")]
+layout.append(layout_line)
+layout_line = [sg.Text("Successful free accs raids: "), sg.Text(size=(10,1), key='raids',visible=True)]
+layout.append(layout_line)
+
+layout_line = [sg.Text("Cards dropped:"), sg.Text(size=(10,1), key='cards',visible=True)]
+layout.append(layout_line)
+# Create the window
+window = sg.Window('Window Title', layout)
+
+
+while True:
+    event, values = window.read()
+    if event == sg.WINDOW_CLOSED:
+        break
+    print(event)
+    if event == 'RunAll':
+        pass
+        # threading.Thread(target=runAll).start()
+
+
+    if 'run_' in event:
+        acc = event.split('_')[1]
+
+
+
+
+# Finish up by removing from the screen
+window.close()

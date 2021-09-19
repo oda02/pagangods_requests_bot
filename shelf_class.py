@@ -1,3 +1,4 @@
+import decimal
 import math
 import os
 import shelve
@@ -16,12 +17,21 @@ def singleton(class_):
 @singleton
 class shelf_class():
     def __init__(self):
-
+        self.GOLD = ' - '
+        self.refresh_button_on = True
         self.all_accs = {}
         self.normal_accs = {}
         self.hard_accs = {}
         self.all_accs_gold = shelve.open('accounts_gold', writeback=True)
         self.tokens = shelve.open('tokens', writeback=True)
+        self.stat = shelve.open('stat', writeback=True)
+        try:
+            self.stat['all']
+        except:
+            self.stat['all'] = 0
+            self.stat['successful'] = 0
+            self.stat['cards'] = 0
+        self.stat.sync()
         # self.normal_accs_minute_limit = 0
         # self.last_minute = datetime.now().minute
         # self.accs_minute_limit = 0
@@ -242,58 +252,40 @@ class shelf_class():
         return self.tokens[account]['access_token']
 
     def check_gold(self):
-        while True:
-            GOLD = 0
-            try:
+        self.refresh_button_on = False
+        GOLD = 0
+        try:
+            all_accounts = []
 
-                for acc in self.hard_accs:
-                    if self.tokens[acc]['expires_time'] < time.time():
-                        token = self.get_token(acc)
-                    else:
-                        token =self.tokens[acc]['access_token']
-                    r = requests.post('https://app.pagangods.io/api/v1/users/list-my-sums',
-                                      headers={'Authorization': 'Bearer ' + token})
+            for acc in self.hard_accs:
+                all_accounts.append(acc)
+            for acc in self.normal_accs:
+                all_accounts.append(acc)
+            for acc in self.all_accs:
+                all_accounts.append(acc)
+            i = 0
+            j = len(all_accounts)
+            for acc in all_accounts:
+                if self.tokens[acc]['expires_time'] < time.time():
+                    token = self.get_token(acc)
+                else:
+                    token =self.tokens[acc]['access_token']
+                r = requests.post('https://app.pagangods.io/api/v1/users/list-my-sums',
+                                  headers={'Authorization': 'Bearer ' + token})
+                data = r.json()['data']
+                if data:
+                    for x in data:
+                        if x['currency'] == 'FUR':
+                            GOLD += float(x['sum'])
+                i+=1
+                self.GOLD = str(i) + '/' + str(j) + '    ' + str(round(i/j*100, 2)) + "%"
 
-                    data = r.json()['data']
-                    if data:
-                        for x in data:
-                            if x['currency'] == 'FUR':
-                                GOLD += float(x['sum'])
-
-
-
-                for acc in self.normal_accs:
-                    if self.tokens[acc]['expires_time'] < time.time():
-                        token = self.get_token(acc)
-                    else:
-                        token =self.tokens[acc]['access_token']
-                    r = requests.post('https://app.pagangods.io/api/v1/users/list-my-sums',
-                                      headers={'Authorization': 'Bearer ' + token})
-
-                    data = r.json()['data']
-                    if data:
-                        for x in data:
-                            if x['currency'] == 'FUR':
-                                GOLD += float(x['sum'])
-
-                for acc in self.all_accs:
-                    if self.tokens[acc]['expires_time'] < time.time():
-                        token = self.get_token(acc)
-                    else:
-                        token =self.tokens[acc]['access_token']
-                    r = requests.post('https://app.pagangods.io/api/v1/users/list-my-sums',
-                                      headers={'Authorization': 'Bearer ' + token})
-                    data = r.json()['data']
-                    if data:
-                        for x in data:
-                            if x['currency'] == 'FUR':
-                                GOLD += float(x['sum'])
-                os.system('cls||clear')
-                print('GOLD = ', GOLD)
-                time.sleep(3600)
-            except Exception as e:
-                print(e)
-                pass
+            n = decimal.Decimal(int(GOLD))
+            self.GOLD = ('{0:,}'.format(n).replace(',', ' '))
+        except Exception as e:
+            self.GOLD = e
+            pass
+        self.refresh_button_on = True
 
     def get_all_accs_with_new_cards(self):
 
