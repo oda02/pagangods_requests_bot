@@ -20,6 +20,7 @@ def updater(shelf_class_p, window_p):
                 str(round(shelf_class_p.stat['cards'] / shelf_class_p.stat['successful'] * 100, 2)) + "%")
 
             window_p['gold'].update(shelf_class_p.GOLD)
+            window_p['cooldown'].update(shelf_class_p.CD)
             if shelf_class_p.refresh_button_on:
                 window['refresh_gold'].update(disabled=False)
         except:
@@ -156,8 +157,12 @@ layout.append(layout_line)
 
 layout_line = [sg.Text("Cards dropped:"), sg.Text(size=(20,1), key='cards',visible=True)]
 layout.append(layout_line)
+
+layout_line = [sg.Text(size=(20,1), key='cooldown',visible=True)]
+layout.append(layout_line)
 # Create the window
 window = sg.Window('Window Title', layout, finalize=True)
+
 threading.Thread(target=GamerBot, args=(shelf_class_ob, 1)).start()
 threading.Thread(target=updater,
                          args=(shelf_class_ob, window)).start()

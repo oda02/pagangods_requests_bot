@@ -42,4 +42,4 @@ for acc in new_accs:
         print('Аккаунт ' + acc + ' успешно добавлен')
     else:
         print('Вышло недоразумение')
-    time.sleep(5)
+    # time.sleep(5)
