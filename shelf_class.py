@@ -21,6 +21,7 @@ class shelf_class():
         self.refresh_button_on = True
         self.CD = ""
         self.all_accs = {}
+        self.accs_to_stop = {}
         self.normal_accs = {}
         self.hard_accs = {}
         self.all_accs_gold = shelve.open('accounts_gold', writeback=True)
@@ -50,6 +51,15 @@ class shelf_class():
                 if line:
                     line = line.split()
                     self.normal_accs.update({line[0]: line[1]})
+        try:
+            with open('./accs_to_stop.txt', 'r') as fa:
+                for line in fa:
+                    if line:
+                        line = line.split()
+                        self.accs_to_stop.update({line[0]: line[1]})
+        except:
+            pass
+
         try:
             with open('./hard_accs.txt', 'r') as fa:
                 for line in fa:
@@ -281,21 +291,26 @@ class shelf_class():
             for acc in self.all_accs:
                 all_accounts.append(acc)
             i = 0
-            j = len(all_accounts)
             for acc in all_accounts:
-                if self.tokens[acc]['expires_time'] < time.time():
-                    token = self.get_token(acc)
-                else:
-                    token =self.tokens[acc]['access_token']
-                r = requests.post('https://app.pagangods.io/api/v1/users/list-my-sums',
-                                  headers={'Authorization': 'Bearer ' + token})
-                data = r.json()['data']
-                if data:
-                    for x in data:
-                        if x['currency'] == 'FUR':
-                            GOLD += float(x['sum'])
-                i+=1
-                self.GOLD = str(i) + '/' + str(j) + '    ' + str(round(i/j*100, 2)) + "%"
+                flag = True
+                try:
+                    if self.tokens[acc]['expires_time'] < time.time():
+                        token = self.get_token(acc)
+                    else:
+                        token =self.tokens[acc]['access_token']
+                    r = requests.post('https://app.pagangods.io/api/v1/users/list-my-sums',
+                                      headers={'Authorization': 'Bearer ' + token})
+                    data = r.json()['data']
+                    if data:
+                        for x in data:
+                            if x['currency'] == 'FUR':
+                                GOLD += float(x['sum'])
+                    i+=1
+                    self.GOLD = str(i) + '/' + str(len(all_accounts)) + '    ' + str(round(i/len(all_accounts)*100, 2)) + "%"
+                    flag = False
+                except:
+                    if flag:
+                        all_accounts.append(acc)
 
             n = decimal.Decimal(int(GOLD))
             self.GOLD = ('{0:,}'.format(n).replace(',', ' '))
