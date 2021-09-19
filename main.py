@@ -48,7 +48,10 @@ class GamerBot:
                 acc_name = new_acc[0]
                 token = new_acc[1]
                 difficulty = new_acc[2]
-
+                if acc_name in self.shelf_class.accs_to_stop:
+                    print(acc_name + ' skipped')
+                    self.shelf_class.add_acc_timer(acc_name, False)
+                    continue
 
                 print(acc_name)
                 expeditionId = self.get_current_expeditionId(token)
