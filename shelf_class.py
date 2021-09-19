@@ -19,6 +19,7 @@ class shelf_class():
     def __init__(self):
         self.GOLD = ' - '
         self.refresh_button_on = True
+        self.CD = ""
         self.all_accs = {}
         self.normal_accs = {}
         self.hard_accs = {}
@@ -148,29 +149,45 @@ class shelf_class():
         #     self.last_minute = datetime.now().minute
         #     self.normal_accs_minute = 0
         #     self.accs_minute = 0
+        coooldown = 3600
 
         try:
-            if cur_time - self.accounts_time['hard_accs'][0][1] > 0:
+            tm = cur_time - self.accounts_time['hard_accs'][0][1]
+            if tm > 0:
                 # if self.normal_accs_minute < self.normal_accs_minute_limit:
                 acc_name = self.accounts_time['hard_accs'].popleft()[0]
+                self.CD =""
                 return (acc_name, self.get_token(acc_name), 'normal')
+            else:
+                coooldown = -tm
         except Exception as e:
             # print('asdasd', e)
             pass
 
         try:
-            if cur_time - self.accounts_time['normal_accs'][0][1] > 0:
+            tm = cur_time - self.accounts_time['normal_accs'][0][1]
+            if tm > 0:
                 # if self.normal_accs_minute < self.normal_accs_minute_limit:
+                self.CD = ""
                 acc_name = self.accounts_time['normal_accs'].popleft()[0]
                 return (acc_name, self.get_token(acc_name), 'simple')
+            else:
+                if coooldown > -tm:
+                    coooldown = -tm
         except Exception as e:
             # print('asdasd', e)
             pass
-        if cur_time - self.accounts_time['accs'][0][1] > 0:
+        tm = cur_time - self.accounts_time['accs'][0][1]
+        if tm > 0:
             # if self.accs_minute < self.accs_minute_limit:
+            self.CD = ""
             acc_name = self.accounts_time['accs'].popleft()[0]
             return (acc_name, self.get_token(acc_name), 'easy')
         # print(cur_time - self.accounts_time['accs'][0][1])
+        else:
+            if coooldown > -tm:
+                coooldown = -tm
+        self.CD = "cooldown - " + str(round(coooldown, 2)) + " s"
         return False
 
     def add_acc_timer(self, account, time_p):
