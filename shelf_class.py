@@ -148,22 +148,30 @@ class shelf_class():
         # input()
         # thrd = Thread(target=self.check_gold)
         # thrd.start()
-        print(self.normal_accs)
-        print(self.accounts_time['normal_accs'])
-        for acc in self.accs_to_stop:
+        # print(self.normal_accs)
+        # print(self.accounts_time['normal_accs'])
+
+
+        for account in self.accs_to_stop:
             try:
-                self.accounts_time['hard_accs'].remove(acc)
-                print('removed ', acc)
+                for acc in self.accounts_time['accs']:
+                    if acc[0] == account:
+                        self.accounts_time['accs'].remove(acc)
+                        print('will stop ', account)
             except:
                 pass
             try:
-                self.accounts_time['normal_accs'].remove(acc)
-                print('removed ', acc)
+                for acc in self.accounts_time['normal_accs']:
+                    if acc[0] == account:
+                        self.accounts_time['normal_accs'].remove(acc)
+                        print('will stop ', account)
             except:
                 pass
             try:
-                self.accounts_time['accs'].remove(acc)
-                print('removed ', acc)
+                for acc in self.accounts_time['hard_accs']:
+                    if acc[0] == account:
+                        self.accounts_time['hard_accs'].remove(acc)
+                        print('will stop ', account)
             except:
                 pass
 
