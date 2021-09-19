@@ -150,6 +150,23 @@ class shelf_class():
         # thrd.start()
         print(self.normal_accs)
         print(self.accounts_time['normal_accs'])
+        for acc in self.accs_to_stop:
+            try:
+                self.accounts_time['hard_accs'].remove(acc)
+                print('removed ', acc)
+            except:
+                pass
+            try:
+                self.accounts_time['normal_accs'].remove(acc)
+                print('removed ', acc)
+            except:
+                pass
+            try:
+                self.accounts_time['accs'].remove(acc)
+                print('removed ', acc)
+            except:
+                pass
+
 
 
     def get_new_acc(self):
