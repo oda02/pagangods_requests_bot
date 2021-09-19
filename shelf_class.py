@@ -21,7 +21,7 @@ class shelf_class():
         self.refresh_button_on = True
         self.CD = ""
         self.all_accs = {}
-        self.accs_to_stop = {}
+        self.accs_to_stop = []
         self.normal_accs = {}
         self.hard_accs = {}
         self.all_accs_gold = shelve.open('accounts_gold', writeback=True)
@@ -56,7 +56,7 @@ class shelf_class():
                 for line in fa:
                     if line:
                         line = line.split()
-                        self.accs_to_stop.update({line[0]: line[1]})
+                        self.accs_to_stop.append(line[0])
         except:
             pass
 
