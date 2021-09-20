@@ -144,14 +144,19 @@ class GamerBot:
 
     def delete_banned_acc(self, acc):
         f = open('./accs.txt').read()
-        print(acc + ' ' + self.shelf_class.all_accs[acc])
-        print(f.find(acc + ' ' + self.shelf_class.all_accs[acc] + '\n'))
-        new_lines = f.replace(acc + ' ' + self.shelf_class.all_accs[acc] + '\n', '')
-        with open('./accs.txt', 'w') as F:
-            F.writelines(new_lines)
+
+        try:
+            print(acc + ' ' + self.shelf_class.all_accs[acc])
+            new_lines = f.replace(acc + ' ' + self.shelf_class.all_accs[acc] + '\n', '')
+            with open('./accs.txt', 'w') as F:
+                F.writelines(new_lines)
+        except:
+            print('lel')
         for account in self.shelf_class.accounts_time['accs']:
             if account[0] == acc:
+                print('ale')
                 self.shelf_class.accounts_time['accs'].remove(account)
+                self.shelf_class.accounts_time.sync()
         with open('./banned_accs.txt', 'a') as f:
             f.write(acc + ' ' + self.shelf_class.all_accs[acc] + '\n')
 
