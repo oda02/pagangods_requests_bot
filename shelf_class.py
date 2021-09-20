@@ -107,7 +107,7 @@ class shelf_class():
             if flag:
                 self.accounts_time['accs'].appendleft([account, 0])
 
-
+        self.accounts_time['normal_accs'] = deque()
         for account in self.normal_accs:
             try:
                 for acc in self.accounts_time['accs']:

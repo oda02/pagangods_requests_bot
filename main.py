@@ -1,8 +1,9 @@
 import json
+import threading
 import shelve
 from test import write_msg
 import time
-
+import kak
 import requests
 
 from shelf_class import shelf_class
@@ -84,6 +85,9 @@ class GamerBot:
         r = requests.post('https://app.pagangods.io/api/v1/expeditions/complete_expedition',
                           headers={'Authorization': 'Bearer ' + token},
                           json={"expeditionId": expeditionId})
+        if r.status_code == 403:
+            print('banned')
+            self.delete_banned_acc(acc)
         if r.json()['data']:
             self.shelf_class.stat['all'] += 1
             if r.json()['data']['isSuccessful']:
@@ -92,6 +96,7 @@ class GamerBot:
             if r.json()['data']['reward']['assets']:
                 self.shelf_class.stat['cards'] += 1
                 self.add_acc_to_file(acc)
+                threading.Thread(target=kak.import_cards).start()
                 try:
                     card_id = r.json()['data']['reward']['assets'][0]
                     response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',
@@ -137,9 +142,23 @@ class GamerBot:
             with open('./cards_accs.txt', 'a') as f:
                 f.writelines(acc_p+'\n')
 
+    def delete_banned_acc(self, acc):
+        f = open('./accs.txt').read()
+        print(acc + ' ' + self.shelf_class.all_accs[acc])
+        print(f.find(acc + ' ' + self.shelf_class.all_accs[acc] + '\n'))
+        new_lines = f.replace(acc + ' ' + self.shelf_class.all_accs[acc] + '\n', '')
+        with open('./accs.txt', 'w') as F:
+            F.writelines(new_lines)
+        for account in self.shelf_class.accounts_time['accs']:
+            if account[0] == acc:
+                self.shelf_class.accounts_time['accs'].remove(account)
+        with open('./banned_accs.txt', 'a') as f:
+            f.write(acc + ' ' + self.shelf_class.all_accs[acc] + '\n')
 
 
-import threading
+
+
+
 import PySimpleGUI as sg
 
 
