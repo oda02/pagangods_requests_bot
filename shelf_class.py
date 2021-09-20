@@ -90,6 +90,7 @@ class shelf_class():
 
         try:
             self.accounts_time = shelve.open('accounts_time', writeback=True)
+            print(len(self.accounts_time['accs']))
         except Exception as e:
             print(e)
         try:
