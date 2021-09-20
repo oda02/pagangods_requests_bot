@@ -25,9 +25,13 @@ for acc in new_accs:
         cards.append(unit['serverData']['id'])
     response = requests.post('https://app.pagangods.io/api/v1/teams/list',
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})
-    teams = json.loads(response.text)['data']
-    team_id = teams[0]['teamId']
-    team_name = teams[0]['name']
+    team = 0
+    data = response.json()['data']
+    for x in data:
+        if x['name'] == "Team 1":
+            team = x
+    team_id = x['teamId']
+    team_name = x['name']
     response = requests.post('https://app.pagangods.io/api/v1/teams/set',
                              json={'teamId': team_id, 'name': team_name, 'AssetIds': cards},
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})

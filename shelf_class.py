@@ -151,7 +151,8 @@ class shelf_class():
         # thrd.start()
         # print(self.normal_accs)
         # print(self.accounts_time['normal_accs'])
-
+        # self.get_all_accs_with_new_cards()
+        # input()
 
         for account in self.accs_to_stop:
             try:
@@ -250,7 +251,8 @@ class shelf_class():
             self.accounts_time['normal_accs'].append([account, acc_time])
         elif account in self.hard_accs:
             self.accounts_time['hard_accs'].append([account, acc_time])
-        else:
+        elif account in self.all_accs:
+
             # if flag:
             #     self.accs_minute += 1
             self.accounts_time['accs'].append([account, acc_time])
@@ -370,4 +372,4 @@ class shelf_class():
                 if x['lockReason'] == None and x['attributes']['multiplier'] == 1:
                     print(acc)
 
-shelf_class()
+# shelf_class()
