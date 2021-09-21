@@ -1,6 +1,7 @@
 import decimal
 import math
 import os
+import random
 import shelve
 from collections import deque
 from Authorization import *
@@ -142,8 +143,6 @@ class shelf_class():
             if flag:
                 self.accounts_time['hard_accs'].appendleft([account, 0])
 
-
-
         self.tokens_get_first_time()
         # self.get_all_accs_with_new_cards()
         # input()
@@ -157,6 +156,7 @@ class shelf_class():
         for account in self.accs_to_stop:
             try:
                 for acc in self.accounts_time['accs']:
+
                     if acc[0] == account:
                         self.accounts_time['accs'].remove(acc)
                         print('will stop ', account)
@@ -180,6 +180,8 @@ class shelf_class():
 
 
     def get_new_acc(self):
+        if 22 > datetime.now().hour > 14:
+            return False
         cur_time = time.time()
 
         # if self.last_minute != datetime.now().minute:
@@ -240,22 +242,41 @@ class shelf_class():
         #     with open('./new_accs.txt', 'w') as fe:
         #         fe.writelines(lines[1:])
         # flag = True
+        appended_time = random.randint(15, 2400)
         if time_p:
-            acc_time = time_p
+            acc_time = time_p + appended_time
             # flag = False
         else:
-            acc_time = time.time() + 3600+5
+            acc_time = time.time() + appended_time
         if account in self.normal_accs:
-            # if flag:
-            #     self.normal_accs_minute += 1
-            self.accounts_time['normal_accs'].append([account, acc_time])
-        elif account in self.hard_accs:
-            self.accounts_time['hard_accs'].append([account, acc_time])
-        elif account in self.all_accs:
+            i = 0
+            for acc in self.accounts_time['normal_accs']:
+                if acc[1] > acc_time:
+                    self.accounts_time['normal_accs'].insert(i, [account, acc_time])
+                    break
+                i += 1
+            else:
+                self.accounts_time['normal_accs'].insert(i, [account, acc_time])
 
-            # if flag:
-            #     self.accs_minute += 1
-            self.accounts_time['accs'].append([account, acc_time])
+        elif account in self.hard_accs:
+            i = 0
+            for acc in self.accounts_time['hard_accs']:
+                if acc[1] > acc_time:
+                    self.accounts_time['hard_accs'].insert(i, [account, acc_time])
+                    break
+                i += 1
+            else:
+                self.accounts_time['hard_accs'].insert(i, [account, acc_time])
+        elif account in self.all_accs:
+            i = 0
+            for acc in self.accounts_time['accs']:
+                if acc[1] > acc_time:
+                    self.accounts_time['accs'].insert(i, [account, acc_time])
+                    break
+                i += 1
+            else:
+                self.accounts_time['accs'].insert(i, [account, acc_time])
+
         self.accounts_time.sync()
 
     def tokens_get_first_time(self):

@@ -27,11 +27,21 @@ for acc in new_accs:
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})
     team = 0
     data = response.json()['data']
+    print(data)
     for x in data:
         if x['name'] == "Team 1":
             team = x
-    team_id = x['teamId']
-    team_name = x['name']
+
+    # team_id_xd = x['teamId']
+    # team_nam_xd = x['name']
+    # cards_xd = []
+    # response = requests.post('https://app.pagangods.io/api/v1/teams/set',
+    #                          json={'teamId': team_id_xd, 'name': team_nam_xd, 'AssetIds': cards_xd},
+    #                          headers={'Authorization': 'Bearer ' + tokens['access_token']})
+    # if response.status_code == 200:
+    #     print('deleted')
+    team_id = team['teamId']
+    team_name = team['name']
     response = requests.post('https://app.pagangods.io/api/v1/teams/set',
                              json={'teamId': team_id, 'name': team_name, 'AssetIds': cards},
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})
