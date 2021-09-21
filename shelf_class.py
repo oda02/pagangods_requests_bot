@@ -247,7 +247,7 @@ class shelf_class():
             acc_time = time_p + appended_time
             # flag = False
         else:
-            acc_time = time.time() + appended_time
+            acc_time = time.time() + 3600 + appended_time
         if account in self.normal_accs:
             i = 0
             for acc in self.accounts_time['normal_accs']:
