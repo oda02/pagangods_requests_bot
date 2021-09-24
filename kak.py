@@ -41,78 +41,80 @@ def import_cards():
 
     print(accs_data)
     for account in accs:
-
-
-        driver.get("https://app.pagangods.io/")
-        time.sleep(1)
-        wait = WebDriverWait(driver, 30)
-        button_login = wait.until(EC.presence_of_element_located((By.XPATH, "//span[@class='inanomo']")))
-        button_login.click()
-        wait = WebDriverWait(driver, 10)
-        username_input = wait.until(EC.presence_of_element_located((By.XPATH, '//input[@name="login"]')))
-        password_input = driver.find_element_by_xpath('//input[@name="password"]')
-        username_input.click()
-        username_input.send_keys(account)
-        password_input.click()
-        print(account)
-        password_input.send_keys(accs_data[account])
-        driver.find_element_by_xpath('//button[@name="submit"]').click()
-
-        wait.until(EC.presence_of_element_located((By.XPATH, "//div[@class='card']")))
-
-        cards = driver.find_elements_by_xpath("//div[@class='card']")
-        for card in cards:
+        all_flag = True
+        while all_flag:
             try:
-                ll = card.find_element_by_xpath(".//div[@class='hero-image__overlay']")
-            except:
+                driver.get("https://app.pagangods.io/")
+                time.sleep(1)
+                wait = WebDriverWait(driver, 30)
+                button_login = wait.until(EC.presence_of_element_located((By.XPATH, "//span[@class='inanomo']")))
+                button_login.click()
+                wait = WebDriverWait(driver, 10)
+                username_input = wait.until(EC.presence_of_element_located((By.XPATH, '//input[@name="login"]')))
+                password_input = driver.find_element_by_xpath('//input[@name="password"]')
+                username_input.click()
+                username_input.send_keys(account)
+                password_input.click()
+                print(account)
+                password_input.send_keys(accs_data[account])
+                driver.find_element_by_xpath('//button[@name="submit"]').click()
 
-                card.find_element_by_xpath(".//div[@class='card__name']").click()
-        mainwindow = driver.current_window_handle
-        button = wait.until(EC.presence_of_element_located((By.XPATH, "//button[text()='Войти в WAX']")))
-        button.click()
+                wait.until(EC.presence_of_element_located((By.XPATH, "//div[@class='card']")))
 
-        flag = True
-        while flag:
-            windows = driver.window_handles
-            for window in windows:
-                driver.switch_to.window(window)
-                element = driver.find_elements_by_xpath('//*[@name="userName"]')
-                time.sleep(0.2)
-                if element:
-                    element[0].click()
-                    element[0].clear()
-                    element[0].send_keys(LOGIN)
-                    element2 = driver.find_elements_by_xpath('//*[@name="password"]')
-                    element2[0].click()
-                    element2[0].clear()
-                    element2[0].send_keys(PASSWORD)
-                    time.sleep(0.5)
-                    element = driver.find_elements_by_xpath('//button[text()="Login"]')
-                    element[0].click()
-                    #
-                    flag = False
-                    break
-                time.sleep(0.5)
+                cards = driver.find_elements_by_xpath("//div[@class='card']")
+                for card in cards:
+                    try:
+                        ll = card.find_element_by_xpath(".//div[@class='hero-image__overlay']")
+                    except:
 
-        while True:
-            windows = driver.window_handles
-            if len(windows) == 1:
-                break
-        driver.switch_to.window(mainwindow)
-        time.sleep(1)
-        driver.find_element_by_xpath('//button[text()="Перенести в WAX"]').click()
-        time.sleep(1)
-        with open('./cards_accs.txt', 'r') as fe:
-            lines = fe.readlines()
-        # запишем файл построчно пропустив первую строку
-        with open('./cards_accs.txt', 'w') as fe:
-            fe.writelines(lines[1:])
+                        card.find_element_by_xpath(".//div[@class='card__name']").click()
+                mainwindow = driver.current_window_handle
+                button = wait.until(EC.presence_of_element_located((By.XPATH, "//button[text()='Войти в WAX']")))
+                button.click()
 
+                flag = True
+                while flag:
+                    windows = driver.window_handles
+                    for window in windows:
+                        driver.switch_to.window(window)
+                        element = driver.find_elements_by_xpath('//*[@name="userName"]')
+                        time.sleep(0.2)
+                        if element:
+                            element[0].click()
+                            element[0].clear()
+                            element[0].send_keys(LOGIN)
+                            element2 = driver.find_elements_by_xpath('//*[@name="password"]')
+                            element2[0].click()
+                            element2[0].clear()
+                            element2[0].send_keys(PASSWORD)
+                            time.sleep(0.5)
+                            element = driver.find_elements_by_xpath('//button[text()="Login"]')
+                            element[0].click()
+                            #
+                            flag = False
+                            break
+                        time.sleep(0.5)
 
-
+                while True:
+                    windows = driver.window_handles
+                    if len(windows) == 1:
+                        break
+                driver.switch_to.window(mainwindow)
+                time.sleep(1)
+                driver.find_element_by_xpath('//button[text()="Перенести в WAX"]').click()
+                time.sleep(1)
+                with open('./cards_accs.txt', 'r') as fe:
+                    lines = fe.readlines()
+                # запишем файл построчно пропустив первую строку
+                with open('./cards_accs.txt', 'w') as fe:
+                    fe.writelines(lines[1:])
+                all_flag = False
+            except Exception as e:
+                print(e)
+                driver.quit()
+                driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
         driver.close()
-        driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
+    driver.quit()
 
-    driver.close()
 
-# import_cards()
+import_cards()
