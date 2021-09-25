@@ -10,7 +10,7 @@ def import_cards():
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--window-size=1600,900")
-    driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
+    driver = uc.Chrome(executable_path='chromedriver.exe', chrome_options=options)
     with open('./wax_data.txt', 'r') as fa:
         lines = fa.readlines()
     LOGIN = lines[0].split()[0]

