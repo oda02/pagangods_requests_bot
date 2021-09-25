@@ -22,7 +22,7 @@ class GiveMeMoney:
         self.options.add_experimental_option('useAutomationExtension', False)
         self.options.add_argument("--window-size=1600,900")
         self.options.add_argument('headless')
-        self.driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=self.options)
+        self.driver = uc.Chrome(executable_path='chromedriver.exe', chrome_options=self.options)
         # self.main_cycle()
         self.withdraw_for_1_acc(acc)
 
@@ -150,46 +150,6 @@ class GiveMeMoney:
     def wait_for_element(self, element):
         return self.wait.until(EC.presence_of_element_located((By.XPATH, element)))
 
-    def test_cycle(self):
-        self.driver.get('https://app.pagangods.io/signin?ReturnUrl=%2F')
-        button = self.wait_for_element('.//span[@class="inanomo"]')
-        button.click()
-        login = self.wait_for_element('.//input[@name="login"]')
-        login.click()
-        login.send_keys('kosyankov01@gmail.com')
-        psw = self.driver.find_element_by_xpath('.//input[@name="password"]')
-        psw.click()
-        psw.send_keys('Kos@inanomo-2001')
-        self.driver.find_element_by_xpath('.//button').click()
-        profile = self.wait_for_element('.//a[@class="top-panel__userpic"]')
-        profile.click()
-        fur = self.wait_for_element('.//span[@class="text-yellow"]')
-        fur = fur.text.split('.')[0]
-        print(fur)
-        withdrawal = self.wait_for_element('.//button[text()="Вывести"]')
-        withdrawal.click()
-        input_field = self.wait_for_element('.//input')
-        input_field.send_keys(10)
-        try:
-            print('типа жду')
-            withdrawal = self.wait_for_element('.//button[@class="button button--large button--primary button--fw"]')
-            withdrawal.click()
-        except:
-            pass
-        try:
-            success = self.wait_for_element('.//div[text()="Успешная транзакция"]')
-        except:
-            pass
-        self.driver.get('https://wallet.inanomo.com/master-account/transfer')
-        cur_button = self.wait_for_element('.//div[@data-currency="FUR"]')
-        cur_button.click()
-        form = self.wait_for_element('.//div[@class="ma-forms__inner"]')
-        inputs = form.find_elements_by_xpath('.//input')
-        inputs[0].click()
-        inputs[0].send_keys(self.wallet)
-        inputs[1].click()
-        inputs[1].send_keys(10)
-        self.driver.find_element_by_xpath('.//button[text()="Перевести"]').click()
 
 # if __name__ == '__main__':
 #     GiveMeMoney('101799670376')
