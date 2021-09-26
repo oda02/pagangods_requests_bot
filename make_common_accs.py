@@ -31,8 +31,10 @@ def export_cards():
                 line = line.split()
                 common_accs.update({line[0]: line[1]})
 
-
+    stop_this = False
     for account in accs:
+        if stop_this:
+            break
         if account in common_accs:
             continue
         all_flag = True
@@ -107,6 +109,7 @@ def export_cards():
                         print(e)
                         # card.find_element_by_xpath(".//div[@class='card__name']").click()
                 if i < 5:
+                    stop_this = True
                     all_flag = False
                     break
                 lalkok = driver.find_element_by_xpath('//button[text()="Перенести в игру"]')
