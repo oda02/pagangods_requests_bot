@@ -62,6 +62,6 @@ for acc in accounts:
         fe.writelines(lines[1:])
     with open('./deleted.txt', 'a') as fe:
         fe.writelines(lines[0])
-    driver.close()
+    driver.quit()
     driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
     print('Аккаунт ' + acc + ' успешно добавлен')
