@@ -22,7 +22,7 @@ for acc in new_accs:
     units = json.loads(response.text)['data']
     cards = []
     for unit in units:
-        if unit['attributes']['multiplier'] == 1:
+        if unit['attributes']['multiplier'] == 0.5:
             cards.append(unit['serverData']['id'])
     response = requests.post('https://app.pagangods.io/api/v1/teams/list',
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})
@@ -47,8 +47,8 @@ for acc in new_accs:
                              json={'teamId': team_id, 'name': team_name, 'AssetIds': cards},
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})
     if response.status_code == 200:
-        # with open('./accs.txt', 'a') as fe:
-        #     fe.write("\n" + acc + " " + new_accs[acc])
+        with open('./accs.txt', 'a') as fe:
+            fe.write("\n" + acc + " " + new_accs[acc])
         with open('./new_accs.txt', 'r') as fe:
             lines = fe.readlines()
         # запишем файл построчно пропустив первую строку
