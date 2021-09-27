@@ -57,7 +57,7 @@ for acc in new_accs:
     units = json.loads(response.text)['data']
     cards = []
     for unit in units:
-        if unit['attributes']['multiplier'] == 0.5:
+        if unit['attributes']['multiplier'] == 1:
             cards.append(unit['serverData']['id'])
     response = requests.post('https://app.pagangods.io/api/v1/teams/list',
                              headers={'Authorization': 'Bearer ' + tokens['access_token']})
