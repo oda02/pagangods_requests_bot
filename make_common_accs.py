@@ -250,5 +250,5 @@ def set_cards():
             print('Вышло недоразумение')
         # time.sleep(5)
 
-# export_cards()
+export_cards()
 set_cards()
