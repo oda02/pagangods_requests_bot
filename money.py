@@ -21,7 +21,7 @@ class GiveMeMoney:
         self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.options.add_experimental_option('useAutomationExtension', False)
         self.options.add_argument("--window-size=1600,900")
-        self.options.add_argument('headless')
+        # self.options.add_argument('headless')
         self.driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=self.options)
         # self.main_cycle()
         self.withdraw_for_1_acc(acc)
@@ -42,12 +42,12 @@ class GiveMeMoney:
                 psw.click()
                 psw.send_keys(acc[1])
                 self.driver.find_element_by_xpath('.//button').click()
-                profile = self.wait_for_element('.//a[@class="top-panel__userpic"]')
+                profile = self.wait_for_element('.//div[@class="top-panel__userpic"]')
                 profile.click()
                 # fur = self.wait_for_element('.//span[@class="text-yellow"]')
                 # fur = fur.text.split('.')[0]
                 # print(fur)
-                withdrawal = self.wait_for_element('.//button[text()="Вывести"]')
+                withdrawal = self.wait_for_element('.//span[text()="Вывести"]')
                 withdrawal.click()
 
                 max_fur_button = self.wait_for_element('//div[text()="Max"]')
@@ -151,5 +151,5 @@ class GiveMeMoney:
         return self.wait.until(EC.presence_of_element_located((By.XPATH, element)))
 
 
-# if __name__ == '__main__':
-#     GiveMeMoney('101799670376')
+if __name__ == '__main__':
+    GiveMeMoney('101799670376', ["***REMOVED***", "***REMOVED***."])

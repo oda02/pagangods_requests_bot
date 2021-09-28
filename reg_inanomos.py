@@ -25,13 +25,14 @@ class MailParser:
         self.receiver = receiver
 
     def get_email_code(self):
-        code = ''
-        status, select_data = self.mail.select('INBOX')
-        messages = select_data[0].decode('utf-8')
-        status, search_data = self.mail.search(None, 'ALL')
-        status, messages = self.mail.select("INBOX")
-        messages = int(messages[0])
+
         while True:
+            code = ''
+            status, select_data = self.mail.select('INBOX')
+            messages = select_data[0].decode('utf-8')
+            status, search_data = self.mail.search(None, 'ALL')
+            status, messages = self.mail.select("INBOX")
+            messages = int(messages[0])
 
             # fetch the email message by ID
             res, msg = self.mail.fetch(str(messages), "(RFC822)")
@@ -66,8 +67,9 @@ for line in f:
         USERNAME = line[0]
 
 
-for i in range(10, 501):
+for i in range(23, 501):
     username_i = USERNAME + "+{}@gmail.com".format(i)
+    print(username_i, "start")
     while True:
         response = requests.post("https://my.inanomo.com/api/v1/users", json={"password":PASSWORD,"email": username_i})
         if response.json()["data"]:

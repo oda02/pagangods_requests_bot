@@ -235,20 +235,24 @@ def set_cards():
         #     print('deleted')
         team_id = team['teamId']
         team_name = team['name']
+
         response = requests.post('https://app.pagangods.io/api/v1/teams/set',
                                  json={'teamId': team_id, 'name': team_name, 'AssetIds': cards},
                                  headers={'Authorization': 'Bearer ' + tokens['access_token']})
-        if response.status_code == 200:
+        if len(cards) == 5:
+            if response.status_code == 200:
 
-            f = open('./common_accs.txt').read()
+                f = open('./common_accs.txt').read()
 
-            new_lines = f.replace(acc + ' ' + new_accs[acc] + '\n', acc + ' ' + new_accs[acc] + ' +\n')
-            print('Аккаунт ' + acc + ' успешно добавлен')
-            with open('./common_accs.txt', 'w') as F:
-                F.writelines(new_lines)
+                new_lines = f.replace(acc + ' ' + new_accs[acc] + '\n', acc + ' ' + new_accs[acc] + ' +\n')
+                print('Аккаунт ' + acc + ' успешно добавлен')
+                with open('./common_accs.txt', 'w') as F:
+                    F.writelines(new_lines)
+            else:
+                print('Вышло недоразумение')
         else:
-            print('Вышло недоразумение')
+            print('карточки еще не дошли')
         # time.sleep(5)
 
-export_cards()
+# export_cards()
 set_cards()
