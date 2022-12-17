@@ -151,5 +151,3 @@ class GiveMeMoney:
         return self.wait.until(EC.presence_of_element_located((By.XPATH, element)))
 
 
-# if __name__ == '__main__':
-#     GiveMeMoney('101799670376', ["***REMOVED***", "***REMOVED***."])
