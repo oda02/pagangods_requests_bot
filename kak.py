@@ -117,4 +117,4 @@ def import_cards():
     driver.quit()
 
 
-import_cards()
+# import_cards()

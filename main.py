@@ -95,13 +95,13 @@ class GamerBot:
             if r.json()['data']['isSuccessful']:
                 self.shelf_class.stat['successful'] += 1
                 print(r.json()['data']['reward']['userSums'])
-                passw = self.shelf_class.all_accs[acc]
-                acc_to_withdraw = [acc, passw]
-                threading.Thread(target=money.GiveMeMoney, args=('101799670376', acc_to_withdraw)).start()
+                # passw = self.shelf_class.all_accs[acc]
+                # acc_to_withdraw = [acc, passw]
+                # threading.Thread(target=money.GiveMeMoney, args=('101799670376', acc_to_withdraw)).start()
             if r.json()['data']['reward']['assets']:
                 self.shelf_class.stat['cards'] += 1
                 self.add_acc_to_file(acc)
-                threading.Thread(target=kak.import_cards).start()
+                # threading.Thread(target=kak.import_cards).start()
                 try:
                     card_id = r.json()['data']['reward']['assets'][0]
                     response = requests.post('https://app.pagangods.io/api/v1/assets/list-server',

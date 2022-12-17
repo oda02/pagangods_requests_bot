@@ -21,7 +21,7 @@ class GiveMeMoney:
         self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.options.add_experimental_option('useAutomationExtension', False)
         self.options.add_argument("--window-size=1600,900")
-        # self.options.add_argument('headless')
+        self.options.add_argument('headless')
         self.driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=self.options)
         # self.main_cycle()
         self.withdraw_for_1_acc(acc)
@@ -151,5 +151,5 @@ class GiveMeMoney:
         return self.wait.until(EC.presence_of_element_located((By.XPATH, element)))
 
 
-if __name__ == '__main__':
-    GiveMeMoney('101799670376', ["***REMOVED***", "***REMOVED***."])
+# if __name__ == '__main__':
+#     GiveMeMoney('101799670376', ["***REMOVED***", "***REMOVED***."])

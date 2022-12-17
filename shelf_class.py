@@ -180,8 +180,8 @@ class shelf_class():
 
 
     def get_new_acc(self):
-        if 22 > datetime.now().hour > 7:
-            return False
+        # if 22 > datetime.now().hour > 7:
+        #     return False
         cur_time = time.time()
 
         # if self.last_minute != datetime.now().minute:
@@ -245,6 +245,7 @@ class shelf_class():
         #         fe.writelines(lines[1:])
         # flag = True
         appended_time = random.randint(15, 1200)
+        appended_time = 5
         if time_p:
             acc_time = time_p + appended_time
             # flag = False

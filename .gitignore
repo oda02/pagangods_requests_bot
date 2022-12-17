@@ -5,3 +5,4 @@ __pycache__
 *.dir
 APPS/
 *.bak
+creds.json

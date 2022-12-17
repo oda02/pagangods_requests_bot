@@ -75,7 +75,7 @@ for i in range(23, 501):
         if response.json()["data"]:
             break
         time.sleep(10)
-    kok = MailParser("***REMOVED***", "***REMOVED***", username_i)
+    kok = MailParser("**", "**", username_i)
     href = kok.get_email_code()
     driver = uc.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
     driver.get(href)
